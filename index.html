@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xaar Grand Opening Media Impact</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        /* ---------- Reset & Base ---------- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #f5f7fa;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            color: #1a2634;
+            padding: 40px 24px;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+        .container {
+            max-width: 1360px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 40px;
+            box-shadow: 0 25px 80px -12px rgba(0, 20, 40, 0.08), 0 8px 24px -6px rgba(0, 0, 0, 0.02);
+            padding: 48px 56px 64px;
+            transition: all 0.2s;
+        }
+        @media (max-width: 768px) {
+            body { padding: 20px 16px; }
+            .container { padding: 28px 20px 40px; border-radius: 28px; }
+        }
+
+        /* ---------- Header ---------- */
+        .report-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding-bottom: 24px;
+            margin-bottom: 44px;
+            border-bottom: 1px solid #eaedf2;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .report-header h1 {
+            font-size: 30px;
+            font-weight: 500;
+            letter-spacing: -0.4px;
+            color: #121e2d;
+        }
+        .report-header h1 .subhead {
+            font-weight: 400;
+            font-size: 18px;
+            color: #6e7e93;
+            margin-left: 14px;
+            letter-spacing: 0;
+        }
+        .report-header .badge {
+            font-size: 14px;
+            font-weight: 450;
+            color: #4a5b6e;
+            background: #f0f3f7;
+            padding: 6px 18px;
+            border-radius: 40px;
+            letter-spacing: 0.2px;
+        }
+
+        /* ---------- KPI Grid ---------- */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 16px;
+            margin-bottom: 52px;
+        }
+        .kpi-item {
+            background: #f9fafc;
+            border-radius: 20px;
+            padding: 20px 16px 16px;
+            text-align: center;
+            border: 1px solid #edf0f5;
+            transition: background 0.15s;
+        }
+        .kpi-item:hover { background: #f4f7fd; }
+        .kpi-number {
+            font-size: 34px;
+            font-weight: 500;
+            color: #121e2d;
+            line-height: 1.2;
+            letter-spacing: -0.3px;
+        }
+        .kpi-label {
+            font-size: 13px;
+            font-weight: 450;
+            color: #4a5b6e;
+            margin-top: 6px;
+        }
+        .kpi-label .en {
+            font-weight: 400;
+            font-size: 11px;
+            color: #7f8ea3;
+            display: block;
+            margin-top: 2px;
+        }
+
+        /* ---------- Two Columns ---------- */
+        .row-two {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 52px;
+        }
+        @media (max-width: 900px) {
+            .row-two { grid-template-columns: 1fr; gap: 32px; }
+        }
+        .chart-box {
+            background: #fafbfd;
+            border-radius: 24px;
+            padding: 24px 20px 12px;
+            border: 1px solid #eaeef4;
+        }
+        .chart-box h3 {
+            font-size: 17px;
+            font-weight: 500;
+            color: #1a2a3a;
+            margin-bottom: 8px;
+        }
+        .chart-box canvas {
+            max-height: 260px;
+            max-width: 100%;
+        }
+        .chart-note {
+            font-size: 12px;
+            color: #8a9bb0;
+            text-align: center;
+            margin-top: 4px;
+        }
+        .matrix-box {
+            background: #fafbfd;
+            border-radius: 24px;
+            padding: 24px 20px 20px;
+            border: 1px solid #eaeef4;
+        }
+        .matrix-box h3 {
+            font-size: 17px;
+            font-weight: 500;
+            color: #1a2a3a;
+            margin-bottom: 16px;
+        }
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        .matrix-cell {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 14px 14px 10px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.01);
+        }
+        .matrix-cell .quadrant {
+            font-weight: 500;
+            font-size: 13px;
+            color: #1a2a3a;
+            border-bottom: 1px solid #eaeef4;
+            padding-bottom: 6px;
+            margin-bottom: 8px;
+        }
+        .matrix-cell ul {
+            list-style: none;
+            font-size: 13px;
+            color: #2d3e52;
+            line-height: 1.7;
+        }
+        .matrix-cell ul li::before {
+            content: "— ";
+            color: #8a9bb0;
+            font-weight: 300;
+        }
+        .matrix-cell .tag {
+            display: inline-block;
+            background: #edf2f8;
+            border-radius: 20px;
+            padding: 0 10px;
+            font-size: 11px;
+            color: #3d5a78;
+            margin-top: 6px;
+            font-weight: 450;
+        }
+
+        /* ---------- Value Section ---------- */
+        .value-section {
+            background: #f8fafd;
+            border-radius: 24px;
+            padding: 28px 32px;
+            margin-bottom: 52px;
+            border-left: 4px solid #1e3a5a;
+        }
+        .value-section h3 {
+            font-size: 19px;
+            font-weight: 500;
+            color: #121e2d;
+            margin-bottom: 16px;
+        }
+        .value-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px 32px;
+        }
+        .value-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+        .value-item .icon {
+            font-size: 20px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .value-item p {
+            font-size: 14px;
+            line-height: 1.5;
+            color: #1f3142;
+        }
+        .value-item strong {
+            color: #121e2d;
+            font-weight: 500;
+        }
+        @media (max-width: 600px) {
+            .value-grid { grid-template-columns: 1fr; }
+            .value-section { padding: 24px 20px; }
+        }
+
+        /* ---------- Gallery Titles ---------- */
+        .gallery-title {
+            font-size: 22px;
+            font-weight: 500;
+            color: #121e2d;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .gallery-title .count {
+            background: #eaeef4;
+            padding: 2px 14px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 450;
+            color: #3d5a78;
+            margin-left: auto;
+        }
+
+        /* ---------- Card Grid ---------- */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 6px;
+        }
+        .article-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 18px 20px 14px;
+            border: 1px solid #eaedf2;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.01);
+        }
+        .article-card:hover {
+            border-color: #c8d4e4;
+            box-shadow: 0 8px 24px -8px rgba(18, 30, 45, 0.06);
+            transform: translateY(-2px);
+        }
+        .article-card .media-name {
+            font-size: 12px;
+            font-weight: 500;
+            color: #3d5a78;
+            letter-spacing: 0.2px;
+            margin-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+            text-transform: uppercase;
+            opacity: 0.8;
+        }
+        .article-card .media-name .badge {
+            background: #edf2f8;
+            font-size: 10px;
+            font-weight: 500;
+            padding: 0 10px;
+            border-radius: 30px;
+            color: #4a5b6e;
+            text-transform: none;
+        }
+        .article-card .title {
+            font-size: 14px;
+            font-weight: 450;
+            color: #121e2d;
+            line-height: 1.5;
+            margin-bottom: 4px;
+        }
+        .article-card .title a {
+            text-decoration: none;
+            color: inherit;
+            transition: color 0.1s;
+        }
+        .article-card .title a:hover {
+            color: #1a4a7a;
+        }
+        .article-card .title-en {
+            font-size: 12px;
+            font-weight: 400;
+            color: #6e7e93;
+            line-height: 1.4;
+            margin-bottom: 10px;
+            border-top: 1px dashed #eaeef4;
+            padding-top: 6px;
+        }
+        .article-card .footer-link {
+            font-size: 12px;
+            color: #8a9bb0;
+            border-top: 1px solid #edf0f5;
+            padding-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .article-card .footer-link a {
+            color: #2a5f8a;
+            text-decoration: none;
+            font-weight: 450;
+            font-size: 12px;
+        }
+        .article-card .footer-link a:hover {
+            text-decoration: underline;
+        }
+        .video-card .media-name {
+            color: #a64b3a;
+        }
+        .video-card .footer-link a {
+            color: #b34a36;
+        }
+        .video-card .title-en {
+            border-top-color: #f0dbd6;
+        }
+
+        /* ---------- Divider ---------- */
+        .section-divider {
+            border-top: 1px solid #eaedf2;
+            margin: 44px 0 28px;
+        }
+        .footer-note {
+            margin-top: 36px;
+            text-align: right;
+            font-size: 12px;
+            color: #9aabbd;
+            border-top: 1px solid #eaedf2;
+            padding-top: 24px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <!-- Header -->
+    <div class="report-header">
+        <h1>
+            Xaar Grand Opening Media Impact
+            <span class="subhead">Asia HQ Opening - Marketing Report</span>
+        </h1>
+        <div class="badge">June 2026</div>
+    </div>
+
+    <!-- KPI Cards -->
+    <div class="kpi-grid">
+        <div class="kpi-item">
+            <div class="kpi-number">49+</div>
+            <div class="kpi-label">Articles <span class="en">34 media outlets</span></div>
+        </div>
+        <div class="kpi-item">
+            <div class="kpi-number">9+</div>
+            <div class="kpi-label">Videos <span class="en">WeChat & TV</span></div>
+        </div>
+        <div class="kpi-item">
+            <div class="kpi-number">58+</div>
+            <div class="kpi-label">Total Content <span class="en">Press Release + Video Report + Video Interview</span></div>
+        </div>
+        <div class="kpi-item">
+            <div class="kpi-number">16+</div>
+            <div class="kpi-label">WeChat Accounts <span class="en">Industrial & Local Media</span></div>
+        </div>
+        <div class="kpi-item">
+            <div class="kpi-number">160,000+</div>
+            <div class="kpi-label">Estimated Views <span class="en">16万+</span></div>
+        </div>
+    </div>
+
+    <!-- Two Columns: Chart + Matrix -->
+    <div class="row-two">
+        <div class="chart-box">
+            <h3>📊 Media Mix</h3>
+            <canvas id="mediaChart" width="400" height="260"></canvas>
+            <div class="chart-note">Vertical + WeChat account for 64%</div>
+        </div>
+        <div class="matrix-box">
+            <h3>🎯 Influence Matrix</h3>
+            <div class="matrix-grid">
+                <div class="matrix-cell">
+                    <div class="quadrant">🔹 High Authority · In-depth</div>
+                    <ul><li>China Daily · Huanqiu</li><li>21st Century Business Herald</li></ul>
+                    <span class="tag">National / Finance</span>
+                </div>
+                <div class="matrix-cell">
+                    <div class="quadrant">🔸 Broad Reach · Standard</div>
+                    <ul><li>Nanfang Daily · Guangzhou Daily</li><li>Dongguan Daily · Dongguan TV</li></ul>
+                    <span class="tag">Local Mainstream</span>
+                </div>
+                <div class="matrix-cell">
+                    <div class="quadrant">🔹 Vertical · Professional</div>
+                    <ul><li>China Packaging · Smart Mfg</li><li>Polar Bear · Packaging Zone AI</li></ul>
+                    <span class="tag">Industry Leaders / KOL</span>
+                </div>
+                <div class="matrix-cell">
+                    <div class="quadrant">🔸 Wide Distribution</div>
+                    <ul><li>Sohu · Sina · NetEase</li><li>CNFOL · 10jqka</li></ul>
+                    <span class="tag">Portals / Finance</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Communication Value -->
+    <div class="value-section">
+        <h3>💡 Communication Value</h3>
+        <div class="value-grid">
+            <div class="value-item">
+                <span class="icon">📡</span>
+                <p><strong>Strong strategic signal</strong> – Full media coverage conveys commitment to “Deepen in China, Empower Smart Manufacturing”.</p>
+            </div>
+            <div class="value-item">
+                <span class="icon">🎯</span>
+                <p><strong>Strong industry influence</strong> – Vertical leaders precisely reach upstream and downstream of the industry chain.</p>
+            </div>
+            <div class="value-item">
+                <span class="icon">🏛️</span>
+                <p><strong>Localization narrative resonates</strong> – “Leader settles”, “hidden champion” reinforce leadership image.</p>
+            </div>
+            <div class="value-item">
+                <span class="icon">🧩</span>
+                <p><strong>Rich communication layers</strong> – Party media endorsement + industry insight + financial analysis form a 3D matrix.</p>
+            </div>
+        </div>
+    </div>
+
+<!-- 板块快速跳转导航 -->
+<div style="margin:0 0 32px; padding:20px 24px; background:#f8fafd; border-radius:24px; border:1px solid #eaeef4;">
+    <h4 style="margin:0 0 16px; font-size:17px; font-weight:500; color:#121e2d;">Quick Jump Navigation</h4>
+    <div style="display:flex; gap:14px; flex-wrap:wrap;">
+        <button onclick="scrollToSection('articleGallery')" style="padding:9px 18px; border:none; background:#121e2d; color:#ffffff; border-radius:32px; cursor:pointer; font-size:14px; transition:0.2s ease;"
+        onmouseover="this.style.background='#2c4b6e'" onmouseout="this.style.background='#121e2d'">
+            📄 Article Gallery
+        </button>
+        <button onclick="scrollToSection('videoGallery')" style="padding:9px 18px; border:none; background:#121e2d; color:#ffffff; border-radius:32px; cursor:pointer; font-size:14px; transition:0.2s ease;"
+        onmouseover="this.style.background='#2c4b6e'" onmouseout="this.style.background='#121e2d'">
+            🎬 Video Gallery
+        </button>
+        <button onclick="scrollToSection('newspaperGallery')" style="padding:9px 18px; border:none; background:#121e2d; color:#ffffff; border-radius:32px; cursor:pointer; font-size:14px; transition:0.2s ease;"
+        onmouseover="this.style.background='#2c4b6e'" onmouseout="this.style.background='#121e2d'">
+            📰 Newspaper
+        </button>
+        <button onclick="scrollToSection('livePhotoGallery')" style="padding:9px 18px; border:none; background:#121e2d; color:#ffffff; border-radius:32px; cursor:pointer; font-size:14px; transition:0.2s ease;"
+        onmouseover="this.style.background='#2c4b6e'" onmouseout="this.style.background='#121e2d'">
+            📸 Photo Live Streaming
+        </button>
+    </div>
+</div>
+
+
+    <!-- Article Gallery -->
+    <div class="gallery-title">
+        📄 Article Gallery <span class="count">49</span>
+    </div>
+    <div class="card-grid" id="articleGallery"></div>
+
+    <div class="section-divider"></div>
+
+    <!-- Video Gallery -->
+    <div class="gallery-title">
+        🎬 Video Gallery <span class="count">9</span>
+    </div>
+    <div class="card-grid" id="videoGallery"></div>
+
+
+<div class="section-divider"></div>
+
+<!-- Newspaper Page Gallery (Single Image) -->
+<div class="gallery-title">
+    📰 Newspaper <span class="count">1</span>
+</div>
+<div class="card-grid" id="newspaperGallery"></div>
+
+<div class="section-divider"></div>
+
+<!-- Live Photo Streaming Gallery (Single Image + Highlight view count) -->
+<div class="gallery-title">
+    📸 Photo Live Streaming
+    <span class="count">1</span>
+</div>
+<div class="card-grid" id="livePhotoGallery"></div>
+
+    <div class="footer-note">Data source: Xaar Launch Media Coverage Summary</div>
+</div>
+
+
+    <div class="footer-note">Data source: Internet </div>
+</div>
+
+<script>
+
+// 平滑滚动跳转函数
+function scrollToSection(sectionId) {
+  const targetDom = document.getElementById(sectionId);
+  if (targetDom) {
+    targetDom.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    });
+  }
+}
+
+
+
+    // ---------- Pie Chart ----------
+    const ctx = document.getElementById('mediaChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['National', 'Local Mainstream', 'Finance/Industry', 'Vertical', 'Portals', 'WeChat', 'Other'],
+            datasets: [{
+                data: [3, 5, 3, 15, 4, 17, 2],
+                backgroundColor: ['#2c4b6e', '#3e6a94', '#5f88b0', '#84a8c9', '#abc4dd', '#d0ddee', '#e5ecf4'],
+                borderColor: '#ffffff',
+                borderWidth: 2,
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: { font: { size: 11, weight: '400' }, boxWidth: 12, padding: 14, color: '#3d5a78' }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let total = context.dataset.data.reduce((a,b) => a+b, 0);
+                            let pct = ((context.parsed / total) * 100).toFixed(1);
+                            return context.label + ': ' + context.parsed + ' (' + pct + '%)';
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+   // ---------- Article Data (49 items with bilingual media name + bilingual titles) ----------
+const articles = [
+    { media: '赛尔Xaar', title: '赛尔Xaar 亚太区总部正式落成东莞松山湖：深化本地化布局 赋能亚洲先进制造业发展', titleEn: 'Xaar Asia-Pacific Headquarters inaugurated in Songshan Lake, Dongguan: Deepening local layout to empower advanced manufacturing across Asia', link: 'https://mp.weixin.qq.com/s/jBJY9wUwTpsOFEMChRlnXQ' },
+    { media: '南方日报 | Nanfang Daily', title: '赛尔集团亚太区总部落子东莞松山湖，深化本土战略布局', titleEn: 'Xaar Group Asia-Pacific Headquarters Established in Dongguan Songshan Lake, Deepening Localized Strategic Layout', link: 'https://static.nfnews.com/content/202606/17/c12537232.html' },
+    { media: '南方都市报 | Southern Metropolis Daily', title: '喷墨印刷巨头落地东莞松山湖！彰显外企扎根大湾区发展信号', titleEn: 'Inkjet Printing Giant Lands in Dongguan Songshan Lake! Signaling Foreign Enterprises\' Commitment to the Greater Bay Area Development', link: 'https://m.mp.oeeee.com/a/BAAFRD0000202606171610715.html' },
+    { media: '广州日报 | Guangzhou Daily', title: '赛尔亚太区总部落户东莞松山湖，深耕中国市场赋能制造业数字化转型', titleEn: 'Xaar Asia-Pacific Headquarters Settles in Dongguan Songshan Lake, Deepening China Market Presence to Empower Manufacturing Digital Transformation', link: 'https://huacheng.gz-cmc.com/pages/2026/06/17/8d3594c4908e4a5ca6669d7aa5b26cd8.html' },
+    { media: '广州日报（视频号） | Guangzhou Daily (Video Channel)', title: '全球喷墨龙头赛尔亚太区总部落地东莞松山湖', titleEn: 'Global Inkjet Leader Xaar\'s Asia-Pacific Headquarters Lands in Dongguan Songshan Lake', link: '#' },
+    { media: '东莞日报 | Dongguan Daily', title: '赛尔亚太区总部正式落户松山湖 深耕中国市场赋能制造业数字化转型', titleEn: 'Xaar Asia-Pacific Headquarters Officially Settles in Songshan Lake, Deepening China Market Presence to Empower Manufacturing Digital Transformation', link: 'https://view.timedg.com/pages/2026/06/17/b61e53648ae140ad92d34d564e69c86e.html' },
+    { media: '东莞日报（报纸） | Dongguan Daily (Print Edition)', title: '赛尔亚太区总部正式落户松山湖 深耕中国市场赋能制造业数字化转型', titleEn: 'Xaar Asia-Pacific Headquarters Officially Settles in Songshan Lake, Deepening China Market Presence to Empower Manufacturing Digital Transformation', link: '#' },
+    { media: '东莞广播电视台 | Dongguan Radio & Television', title: '全球头部企业落地松山湖！赛尔集团亚太区新总部正式启用', titleEn: 'Global Leading Enterprise Lands in Songshan Lake! Xaar Group\'s New Asia-Pacific Headquarters Officially Inaugurated', link: 'https://webzdg.sun0769.com/web/news/content/834376' },
+    { media: '东莞广播电视台（公众号） | Dongguan Radio & Television (WeChat Official Account)', title: '再引龙头！全球巨头亚太总部落户东莞', titleEn: 'Another Industry Leader! Global Giant\'s Asia-Pacific Headquarters Settles in Dongguan', link: 'https://mp.weixin.qq.com/s/l6JUTwPzJuuKwTQ_esG0Cw' },
+    { media: '东莞广播电视台 | Dongguan Radio & Television', title: '赛尔亚太区总部落户松山湖 赋能湾区喷墨产业发展', titleEn: 'Xaar Asia-Pacific Headquarters Settles in Songshan Lake, Empowering Greater Bay Area Inkjet Industry Development', link: 'https://webzdg.sun0769.com/web/video/content/835144' },
+    { media: '21世纪经济报道 | 21st Century Business Herald', title: '全球工业喷墨“隐形冠军”亚太总部落户东莞', titleEn: 'Global Industrial Inkjet "Hidden Champion" Asia-Pacific Headquarters Settles in Dongguan', link: 'https://m.21jingji.com/article/20260617/herald/ed9e9be9e33e19b07bab949c25c39b5d.html' },
+    { media: '南方Plus（百家号） | Nanfang Plus (Baidu Baijiahao)', title: '赛尔集团亚太区总部落子东莞松山湖，深化本土战略布局', titleEn: 'Xaar Group Asia-Pacific Headquarters Established in Dongguan Songshan Lake, Deepening Localized Strategic Layout', link: 'https://baijiahao.baidu.com/s?id=1868241712949040979' },
+    { media: '21世纪经济报道（百家号） | 21st Century Business Herald (Baidu Baijiahao)', title: '全球工业喷墨"隐形冠军"亚太总部落户东莞', titleEn: 'Global Industrial Inkjet "Hidden Champion" Asia-Pacific Headquarters Settles in Dongguan', link: 'https://baijiahao.baidu.com/s?id=1868252909673787612' },
+    { media: '搜狐网 | Sohu News Portal', title: '赛尔亚太区总部正式落成东莞松山湖：深化本地化布局 赋能亚洲先进制造业发展', titleEn: 'Xaar Asia-Pacific Headquarters Officially Inaugurated in Dongguan Songshan Lake: Deepening Localized Layout to Empower Asian Advanced Manufacturing Development', link: 'https://biznews.sohu.com/a/1038472174_12119836' },
+    { media: '新浪财经 | Sina Finance', title: '赛尔亚太区总部正式落成东莞松山湖：深化本地化布局 赋能亚洲先进制造业发展', titleEn: 'Xaar Asia-Pacific Headquarters Officially Inaugurated in Dongguan Songshan Lake: Deepening Localized Layout to Empower Asian Advanced Manufacturing Development', link: 'https://finance.sina.cn/2026-06/24/detail-inienpmw1551746.d.html' },
+    { media: '环球网 | Huanqiu.com', title: '赛尔亚太区总部正式落成东莞松山湖：深化本地化布局 赋能亚洲先进制造业发展', titleEn: 'Xaar Asia-Pacific Headquarters Officially Inaugurated in Dongguan Songshan Lake: Deepening Localized Layout to Empower Asian Advanced Manufacturing Development', link: 'https://yrd.huanqiu.com/article/4S1sn4FgXRI' },
+    { media: '网易新闻 | NetEase News', title: '赛尔亚太区总部正式落成东莞松山湖：深化本地化布局 赋能亚洲先进制造业发展', titleEn: 'Xaar Asia-Pacific Headquarters Officially Inaugurated in Dongguan Songshan Lake: Deepening Localized Layout to Empower Asian Advanced Manufacturing Development', link: 'https://www.163.com/news/article/KVNEGMFI00019UD6.html' },
+    { media: '中国日报 | China Daily', title: '赛尔亚太区总部正式落成东莞松山湖：深化本地化布局 赋能亚洲先进制造业发展', titleEn: 'Xaar Asia-Pacific Headquarters Officially Inaugurated in Dongguan Songshan Lake: Deepening Localized Layout to Empower Asian Advanced Manufacturing Development', link: 'https://cnews.chinadaily.com.cn/a/202606/18/WS6a33b489a310d709c2fb8f73.html' },
+    { media: '中国包装网 | China Packaging Network', title: '赛尔亚太区总部正式落成东莞松山湖：深化本地化布局 赋能亚洲先进制造业发展', titleEn: 'Xaar Asia-Pacific Headquarters Officially Inaugurated in Dongguan Songshan Lake: Deepening Localized Layout to Empower Asian Advanced Manufacturing Development', link: 'https://baozhuang.speeken.com/archives/12122' },
+    { media: '我的印刷网 | 51MyPrint Website', title: '赛尔亚太区总部正式落成东莞松山湖：深化本地化布局 赋能亚洲先进制造业发展', titleEn: 'Xaar Asia-Pacific Headquarters Officially Inaugurated in Dongguan Songshan Lake: Deepening Localized Layout to Empower Asian Advanced Manufacturing Development', link: 'https://www.51myprint.cn/news/show-26257.html' },
+    { media: '包装印刷产业网 | Packaging & Printing Industry Network', title: '赛尔亚太区总部正式落成东莞松山湖：深化本地化布局 赋能亚洲先进制造业发展', titleEn: 'Xaar Asia-Pacific Headquarters Officially Inaugurated in Dongguan Songshan Lake: Deepening Localized Layout to Empower Asian Advanced Manufacturing Development', link: 'https://www.ppzhan.com/company_news/detail/53890.html' },
+    { media: '中国工业新闻网 | China Industry News Network', title: '赛尔亚太区总部正式落成东莞松山湖：深化本地化布局 赋能亚洲先进制造业发展', titleEn: 'Xaar Asia-Pacific Headquarters Officially Inaugurated in Dongguan Songshan Lake: Deepening Localized Layout to Empower Asian Advanced Manufacturing Development', link: 'https://www.cinn.cn/hz/2026/06-18/Nk07YE3D.html' },
+    { media: '智能制造网 | Intelligent Manufacturing Network', title: '赛尔亚太区总部正式落成东莞松山湖：深化本地化布局 赋能亚洲先进制造业发展', titleEn: 'Xaar Asia-Pacific Headquarters Officially Inaugurated in Dongguan Songshan Lake: Deepening Localized Layout to Empower Asian Advanced Manufacturing Development', link: 'https://www.gkzhan.com/company_news/detail/250976.html' },
+    { media: '芯通社 | SemiWebs', title: '赛尔亚太区总部正式落成东莞松山湖：深化本地化布局 赋能亚洲先进制造业发展', titleEn: 'Xaar Asia-Pacific Headquarters Officially Inaugurated in Dongguan Songshan Lake: Deepening Localized Layout to Empower Asian Advanced Manufacturing Development', link: 'https://www.semiwebs.com/10132.html' },
+    { media: '维科网 | OFweek Industry Portal', title: '赛尔亚太区总部正式落成东莞松山湖：深化本地化布局 赋能亚洲先进制造业发展', titleEn: 'Xaar Asia-Pacific Headquarters Officially Inaugurated in Dongguan Songshan Lake: Deepening Localized Layout to Empower Asian Advanced Manufacturing Development', link: 'https://www.ofweek.com/im/2026-06/ART-201900-8460-30691308.html' },
+    { media: '3D打印资源库 | 3D Printing Resource Library', title: '赛尔亚太区总部正式落成东莞松山湖：深化本地化布局 赋能亚洲先进制造业发展', titleEn: 'Xaar Asia-Pacific Headquarters Officially Inaugurated in Dongguan Songshan Lake: Deepening Localized Layout to Empower Asian Advanced Manufacturing Development', link: 'https://www.3dzyk.cn/thread-38333-1-1.html#pid133185' },
+    { media: '增材制造网 | Additive Manufacturing Network', title: '赛尔亚太区总部正式落成东莞松山湖：深化本地化布局 赋能亚洲先进制造业发展', titleEn: 'Xaar Asia-Pacific Headquarters Officially Inaugurated in Dongguan Songshan Lake: Deepening Localized Layout to Empower Asian Advanced Manufacturing Development', link: 'https://www.zczz.com/redian/1086.html' },
+    { media: '中金在线 | CNFOL Finance', title: '全球工业喷墨龙头赛尔亚太总部落地东莞松山湖', titleEn: 'Global Industrial Inkjet Leader Xaar\'s Asia-Pacific Headquarters Lands in Dongguan Songshan Lake', link: 'http://mp.cnfol.com/57779/article/1781773204-142503669.html' },
+    { media: '中华网 | China.com News', title: '喷墨印刷巨头落地东莞松山湖 深化亚洲市场布局', titleEn: 'Inkjet Printing Giant Lands in Dongguan Songshan Lake, Deepening Asian Market Layout', link: 'https://news.china.com/socialgd/10000169/20260618/49557070_1.html' },
+    { media: '唐山陶企采 | Tangshan Ceramic Enterprise Portal', title: '赛尔亚太区总部正式落成东莞松山湖：深化本地化布局 赋能亚洲先进制造业发展', titleEn: 'Xaar Asia-Pacific Headquarters Officially Inaugurated in Dongguan Songshan Lake: Deepening Localized Layout to Empower Asian Advanced Manufacturing Development', link: 'https://www.tstqc.com/Home/DynamicInformationDetail?iInfoType=0&iNIdentifier=63259' },
+    { media: '同花顺财经 | Tongshun Finance', title: '赛尔集团亚太区总部落户东莞松山湖 助力制造业数字化转型', titleEn: 'Xaar Group Asia-Pacific Headquarters Settles in Dongguan Songshan Lake, Boosting Manufacturing Digital Transformation', link: 'https://news.10jqka.com.cn/20260617/c677541248.shtml' },
+    { media: '大湾区经济网 | Greater Bay Area Economic Network', title: '赛尔（Xaar）集团亚太区新总部，落子东莞松山湖！', titleEn: 'The new Asia-Pacific headquarters of Xaar Group settles in Songshan Lake, Dongguan!', link: 'https://www.dwqce.cn/city/22067.html' },
+    { media: '微纳视界 | Micro-Nano Vision', title: '全球领先的喷墨打印头厂商——Xaar集团亚太区新总部落地东莞松山湖', titleEn: 'World-leading inkjet printhead manufacturer Xaar Group establishes its new Asia-Pacific headquarters in Songshan Lake, Dongguan', link: 'https://nanoplatform.cn/new/16520/' },
+    { media: '包装地带AI（公众号） | Packaging Zone AI (WeChat Official Account)', title: '全球工业喷墨"军火商"赛尔亚太总部落户东莞松山湖，加速布局包装印刷新赛道', titleEn: 'Xaar, the global industrial inkjet powerhouse, sets up its Asia-Pacific headquarters in Songshan Lake, Dongguan to accelerate its layout in the new packaging printing track', link: 'https://mp.weixin.qq.com/s/B8N_JJre981eKr4xE4Gxrg' },
+    { media: '南极熊3D打印（公众号） | Polar Bear 3D Printing (WeChat Official Account)', title: '桌面级全彩3D打印爆发前夜，压电陶瓷喷墨打印头厂商来中国开工厂了', titleEn: 'On the eve of the boom in desktop full-color 3D printing, a piezoelectric ceramic inkjet printhead manufacturer builds a factory in China', link: 'https://mp.weixin.qq.com/s/UyHGNsNTD4HqecFMlmZIRA' },
+    { media: '东莞新闻（公众号） | Dongguan News (WeChat Official Account)', title: '再引龙头！全球巨头亚太总部落户东莞', titleEn: 'Another industry leader introduced! A global giant locates its Asia-Pacific headquarters in Dongguan', link: 'https://mp.weixin.qq.com/s/l6JUTwPzJuuKwTQ_esG0Cw' },
+    { media: '爱喷印（公众号） | AiPrint (WeChat Official Account)', title: '赛尔亚太区总部正式落成东莞松山湖：深化本地化布局 赋能亚洲先进制造业发展', titleEn: 'Xaar Asia-Pacific Headquarters officially inaugurated in Songshan Lake, Dongguan: Deepen localized layout and empower the development of advanced manufacturing in Asia', link: 'https://mp.weixin.qq.com/s/XSusdZl-ZH2xsUne1VKaSQ' },
+    { media: '华夏陶瓷网（公众号） | China Ceramics Network (WeChat Official Account)', title: '喷墨头号“军火商”重仓东莞', titleEn: 'The top-tier inkjet industry leader makes heavy investment in Dongguan', link: 'https://mp.weixin.qq.com/s/FqepVCehenu1tMfF4xpYsA' },
+    { media: '创新松山湖（公众号） | Innovative Songshan Lake (WeChat Official Account)', title: '赛尔亚太区总部正式落户东莞松山湖，赋能制造业客户数字化升级', titleEn: 'Xaar Asia-Pacific Headquarters officially settles in Songshan Lake, Dongguan to drive digital upgrading for manufacturing clients', link: 'https://mp.weixin.qq.com/s/zaQGVjNE6zGFs8usdDBbMA' },
+    { media: '桥头科创（公众号） | Qiaotou Innovation Center (WeChat Official Account)', title: '重磅！又一全球巨头，选择东莞', titleEn: 'Breaking News! Another global giant chooses Dongguan', link: 'https://mp.weixin.qq.com/s/632wsMLSBarWAN6I2qpjmw' },
+    { media: '喷印技术（公众号） | Inkjet Printing Technology (WeChat Official Account)', title: '赛尔在东莞设立新亚太总部、打印头组装产线', titleEn: 'Xaar sets up its new Asia-Pacific headquarters and printhead assembly production line in Dongguan', link: 'https://mp.weixin.qq.com/s/OrLEL5xhgfS8X5izJQEzHA' },
+    { media: '东莞阳光网（公众号） | Dongguan Sunshine Network (WeChat Official Account)', title: '重磅！又一全球巨头，落子东莞！', titleEn: 'Breaking News! Another global giant makes strategic settlement in Dongguan!', link: 'https://mp.weixin.qq.com/s/Z_8kxvJgH5kOsoud2PF2Yw' },
+    { media: '喷墨小白（公众号） | Inkjet Novice (WeChat Official Account)', title: '工业喷墨龙头赛尔落子松山湖，亚太新总部打通本土研产服全链条', titleEn: 'Industrial inkjet leader Xaar settles in Songshan Lake, with its new Asia-Pacific headquarters building a full local chain covering R&D, production and services', link: 'https://mp.weixin.qq.com/s/iCghL2VdX9vpHI1Wr6aNgg' },
+    { media: '看东莞（公众号） | Look Dongguan (WeChat Official Account)', title: '重磅！全球工业喷墨巨头“亚太总部”落户东莞！', titleEn: 'Breaking News! The Asia-Pacific Headquarters of a global industrial inkjet giant settles in Dongguan!', link: 'https://mp.weixin.qq.com/s/9NnxCSn0IUR13dxU0MP8Bg' },
+    { media: '喷墨之家（公众号） | Inkjet Home (WeChat Official Account)', title: '行业 | 赛尔 Xaar 亚太总部落地东莞松山湖，本地化全链条赋能工业喷墨', titleEn: 'Industry | Xaar Asia-Pacific Headquarters lands in Songshan Lake, Dongguan, empowering industrial inkjet via a full localized industrial chain', link: 'https://mp.weixin.qq.com/s/7bGxQCB_HNeSzU0bDXFVLQ' },
+    { media: '艾邦陶瓷展（公众号） | Aibang Ceramic Exhibition (WeChat Official Account)', title: '压电陶瓷喷墨打印头厂商——Xaar集团亚太区新总部落地东莞松山湖', titleEn: 'Piezoelectric ceramic inkjet printhead manufacturer Xaar Group launches its new Asia-Pacific headquarters in Songshan Lake, Dongguan', link: 'https://mp.weixin.qq.com/s/9yMYITYaNB_qMep1qI-ZYQ' },
+    { media: '投资广东平台（公众号） | Invest Guangdong Platform (WeChat Official Account)', title: '地市资讯 | 全球龙头企业总部，落子东莞！', titleEn: 'Local News | Headquarters of a global leading enterprise settles in Dongguan!', link: 'https://mp.weixin.qq.com/s/fmIm42z8_VRPiiPFg3bGlw' },
+    { media: '投资广东（公众号） | Invest Guangdong (WeChat Official Account)', title: '全球龙头企业总部，落子东莞！', titleEn: 'Headquarters of a global leading enterprise settles in Dongguan!', link: 'https://mp.weixin.qq.com/s/t128N9ImU0_pgYciq6w8Ng' },
+    { media: '投资东莞（公众号） | Invest Dongguan (WeChat Official Account)', title: '赛尔亚太区总部正式落户东莞松山湖 深耕中国市场赋能制造业数字化转型', titleEn: 'Xaar Asia-Pacific Headquarters officially settles in Songshan Lake, Dongguan, ploughing deep into the Chinese market to fuel digital transformation of manufacturing industry', link: 'https://mp.weixin.qq.com/s/Y54VE62btglERSVVptDo8g' }
+];
+
+    const gallery = document.getElementById('articleGallery');
+    articles.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = 'article-card';
+        const linkHtml = item.link && item.link !== '#'
+            ? `<a href="${item.link}" target="_blank">View Article</a>`
+            : `<span style="color:#b0c2d6;">No link</span>`;
+        card.innerHTML = `
+            <div class="media-name">
+                <span>${item.media}</span>
+                <span class="badge">#${index+1}</span>
+            </div>
+            <div class="title">
+                <a href="${item.link && item.link !== '#' ? item.link : '#'}" target="${item.link && item.link !== '#' ? '_blank' : ''}" style="${item.link === '#' ? 'pointer-events:none;color:#8a9bb5;' : ''}">${item.title}</a>
+            </div>
+            <div class="title-en">${item.titleEn}</div>
+            <div class="footer-link">
+                <span>${index+1} / 49</span>
+                ${linkHtml}
+            </div>
+        `;
+        gallery.appendChild(card);
+    });
+
+
+/// ---------- Video Data (bilingual titles + local image) ----------
+const videos = [
+    {
+        link: 'https://weixin.qq.com/sph/Aj0rhn0Kx3',
+        label: 'WeChat Video',
+        title: '包装地带视频报道',
+        titleEn: 'Packaging Zone Video Report 1',
+        img: '包装地带.png'
+    },
+    {
+        link: 'https://weixin.qq.com/sph/AcZIxMADKS',
+        label: 'WeChat Video',
+        title: '陶信网视频报道',
+        titleEn: 'Ceramics Info Video Report 2',
+        img: '陶信网.png'
+    },
+    {
+        link: 'https://weixin.qq.com/sph/Acjxss5Q1Q',
+        label: 'WeChat Video',
+        title: '陶瓷信息视频报道',
+        titleEn: 'Ceramics Info Video Report 3',
+        img: '陶瓷信息汇.png'
+    },
+    {
+        link: 'https://weixin.qq.com/sph/ADj0PXukBY',
+        label: 'WeChat Video',
+        title: '陶城报视频报道',
+        titleEn: 'Ceramic Town Weekly Video Report 4',
+        img: '陶城报.png'
+    },
+    {
+        link: 'https://weixin.qq.com/sph/AJoZk1r8XL',
+        label: 'WeChat Video',
+        title: '南极熊3D打印视频报道',
+        titleEn: 'Polar Bear 3D Printing Video Report 5',
+        img: '南极熊3D打印.png'
+    },
+    {
+        link: 'https://webzdg.sun0769.com/web/video/content/835144?share=1',
+        label: 'Dongguan TV',
+        title: '赛尔亚太区总部落户松山湖 赋能湾区喷墨产业发展（视频）',
+        titleEn: 'Xaar Asia-Pacific HQ in Songshan Lake – Video (in Chinese)',
+        img: '创新松山湖.png'
+    },
+    {
+        link: 'https://weixin.qq.com/sph/AJ3sDRYx6z',
+        label: 'WeChat Video',
+        title: '前端财经视频报道',
+        titleEn: 'Frontier Finance Video Report 7',
+        img: '前端财经.png'
+    },
+
+    {
+        link: 'https://weixin.qq.com/sph/AhfwdeKxqk',
+        label: 'WeChat Video',
+        title: '赛尔Xaar官方开业盛典回顾视频',
+        titleEn: 'Xaar Official Opening Ceremony Recap Video 8',
+        img: '赛尔Xaar.png'
+    },
+   
+    {
+        link: 'https://weixin.qq.com/sph/AwrXuMAd3g',
+        label: 'WeChat Video',
+        title: '南极熊3D打印：桌面级全彩3D打印喷头科普视频',
+        titleEn: 'Polar Bear 3D Printing: Full-color Desktop 3D Print Head Intro Video 9',
+        img: '南极熊3D.png'
+    }
+];
+
+
+const videoGallery = document.getElementById('videoGallery');
+const videoTotal = videos.length;
+videos.forEach((item, index) => {
+    const card = document.createElement('div');
+    card.className = 'article-card video-card';
+    card.innerHTML = `
+        <div class="media-name">
+            <span>${item.label}</span>
+            <span class="badge">🎬 #${index+1}</span>
+        </div>
+        <div style="margin:8px 0;">
+            <img 
+                src="${item.img}" 
+                alt="${item.title}" 
+                style="width:100%;height:auto;display:block;border-radius:12px;border:1px solid #eee;"
+            >
+        </div>
+        <div class="title">
+            <a href="${item.link}" target="_blank">${item.title}</a>
+        </div>
+        <div class="title-en">${item.titleEn}</div>
+        <div class="footer-link">
+            <span>${index+1} / ${videoTotal}</span>
+            <a href="${item.link}" target="_blank">Play Video</a>
+        </div>
+    `;
+    videoGallery.appendChild(card);
+});
+
+// ==================== 报纸版面（单张图）====================
+const newspaperData = {
+    media: '东莞日报 | Dongguan Daily',
+    title: '赛尔亚太区总部开业报道报纸版面',
+    titleEn: 'Newspaper page for Xaar Asia-Pacific Headquarters opening coverage',
+    img: '报纸.jpg'
+};
+const newspaperGallery = document.getElementById('newspaperGallery');
+const newsCard = document.createElement('div');
+newsCard.className = 'article-card';
+newsCard.innerHTML = `
+    <div class="media-name">
+        <span>${newspaperData.media}</span>
+        <span class="badge">📰 #1</span>
+    </div>
+    <div style="margin:8px 0;">
+        <img 
+            src="${newspaperData.img}" 
+            alt="${newspaperData.title}" 
+            style="width:100%;height:auto;display:block;border-radius:12px;border:1px solid #eee;"
+        >
+    </div>
+    <div class="title">
+        ${newspaperData.link !== '#' ? `<a href="${newspaperData.link}" target="_blank">${newspaperData.title}</a>` : newspaperData.title}
+    </div>
+    <div class="title-en">${newspaperData.titleEn}</div>
+    <div class="footer-link">
+        <span>1 / 1</span>
+        ${newspaperData.link !== '#' ? `<a href="${newspaperData.link}" target="_blank">View Detail</a>` : '<span style="color:#b0c2d6;">No link</span>'}
+    </div>
+`;
+newspaperGallery.appendChild(newsCard);
+
+// ==================== 图片直播（单张图）====================
+const livePhotoData = {
+    media: '活动图片直播 | Event Photo Live Stream',
+    title: '赛尔亚太总部开业仪式现场实拍总图',
+    titleEn: 'Overview photo of Xaar Asia Headquarters opening ceremony scene',
+    img: '图片直播.jpg'
+};
+const livePhotoGallery = document.getElementById('livePhotoGallery');
+const photoCard = document.createElement('div');
+photoCard.className = 'article-card';
+photoCard.innerHTML = `
+    <div class="media-name">
+        <span>${livePhotoData.media}</span>
+        <span class="badge">📸 #1</span>
+    </div>
+
+    <div style="display:flex;gap:14px;margin:8px 0;align-items:flex-start;flex-wrap:wrap;">
+        <div style="flex: 1;min-width:200px;">
+            <img 
+                src="${livePhotoData.img}" 
+                alt="${livePhotoData.title}" 
+                style="width:100%;height:auto;display:block;border-radius:12px;border:1px solid #eee;"
+            >
+        </div>
+        <!-- 浏览量气泡 样式对齐顶部KPI -->
+        <div style="flex-shrink:0;background:#f9fafc;border:1px solid #edf0f5;border-radius:16px;padding:16px 12px;text-align:center;min-width:105px;">
+            <div style="font-size:36px;font-weight:500;color:#121e2d;line-height:1.2;">37,489+</div>
+            <div style="font-size:12px;color:#4a5b6e;margin-top:4px;">Total Views</div>
+        </div>
+    </div>
+
+    <div class="title">
+        ${livePhotoData.link !== '#' ? `<a href="${livePhotoData.link}" target="_blank">${livePhotoData.title}</a>` : livePhotoData.title}
+    </div>
+    <div class="title-en">${livePhotoData.titleEn}</div>
+    <div class="footer-link">
+        <span>1 / 1</span>
+        ${livePhotoData.link !== '#' ? `<a href="${livePhotoData.link}" target="_blank">Enter Live Album</a>` : '<span style="color:#b0c2d6;">No link</span>'}
+    </div>
+`;
+livePhotoGallery.appendChild(photoCard);
+
+
+
+</script>
+
+</body>
+</html>
